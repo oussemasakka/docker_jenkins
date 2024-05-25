@@ -27,6 +27,16 @@ pipeline {
 
     post {
         always {
+            echo 'Set up containers...'
+            script {
+                sh 'docker-compose up'
+            }
+        }
+    }
+
+
+    post {
+        always {
             echo 'Cleaning up containers...'
             script {
                 sh 'docker-compose down'
