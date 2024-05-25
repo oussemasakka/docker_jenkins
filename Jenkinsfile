@@ -31,7 +31,10 @@ pipeline {
             script {
                 sh 'docker-compose up -d'
             }
-            
+            echo 'Cleaning up containers...'
+            script {
+                sh 'docker-compose down'
+            }
         }
     }
 }
