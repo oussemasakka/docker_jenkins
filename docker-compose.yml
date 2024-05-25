@@ -8,7 +8,7 @@ services:
 
   mongodb:
     image: mongo
-    container_name: mongodb
+    container_name: mongodb_pipeline
     ports:
       - "27017:27017"
     environment:
@@ -31,7 +31,7 @@ services:
 
   mongo-express:
     image: mongo-express
-    container_name: mongo-express
+    container_name: mongo-express_pipeline
     ports:
       - "8081:8081"
     environment:
