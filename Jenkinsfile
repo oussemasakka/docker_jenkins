@@ -29,13 +29,10 @@ pipeline {
         always {
             echo 'Set up containers...'
             script {
-                sh 'docker-compose up'
+                sh 'docker-compose up -d'
             }
         }
-    }
 
-
-    post {
         always {
             echo 'Cleaning up containers...'
             script {
