@@ -1,35 +1,25 @@
 pipeline {
     agent any
 
-    environment {
-        REMOTE_HOST = '151.80.119.195'
-        SSH_USER = 'ubuntu'
-        SSH_PASSWORD = credentials('sakka123') // Jenkins credential ID for the SSH password
-    }
-
     stages {
         stage('Build Frontend Docker Image') {
             steps {
-                echo 'Building frontend Docker image on remote server...'
-                script {
-                    sh """
-                    sshpass -p '${env.SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no ${env.SSH_USER}@${env.REMOTE_HOST} '
-                        cd frontend && docker build -t frontend-app .
-                    '
-                    """
+                echo 'Building frontend Docker image...'
+                dir('frontend') {
+                    script {
+                        sh 'docker build -t frontend-app .'
+                    }
                 }
             }
         }
 
         stage('Build Backend Docker Image') {
             steps {
-                echo 'Building backend Docker image on remote server...'
-                script {
-                    sh """
-                    sshpass -p '${env.SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no ${env.SSH_USER}@${env.REMOTE_HOST} '
-                        cd backend && docker build -t backend-app .
-                    '
-                    """
+                echo 'Building backend Docker image...'
+                dir('backend') {
+                    script {
+                        sh 'docker build -t backend-app .'
+                    }
                 }
             }
         }
@@ -37,14 +27,11 @@ pipeline {
 
     post {
         always {
-            echo 'Set up containers on remote server...'
+            echo 'Set up containers...'
             script {
-                sh """
-                sshpass -p '${env.SSH_PASSWORD}' ssh -o StrictHostKeyChecking=no ${env.SSH_USER}@${env.REMOTE_HOST} '
-                    docker-compose up -d
-                '
-                """
+                sh 'docker-compose up -d'
             }
+
         }
     }
 }
